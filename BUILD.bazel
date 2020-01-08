@@ -1,0 +1,22 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix example.com/go_package_deps
+gazelle(name = "gazelle")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["main.go"],
+    importpath = "example.com/go_package_deps",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//a:go_default_library",
+        "//b:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "go_package_deps",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
+)
